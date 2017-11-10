@@ -11,7 +11,9 @@ Example usage: ConfigDecrypter.py -input config.conf -output config.txt
 
 For it to work you'll need to fill servers.txt with a list of recent servers (TrickBot servers die very quickly)
 
-the -f (--file) specifes the file to download, here is a list of files available. 
+-o (--output) is the file to save to.
+
+-f (--file) specifes the file to download, here is a list of files available: 
 * Modules
   * systeminfo32 - gather information about the infected system (32-bit module)
   * injectdll32 - injects into the browser and performs webinjects (32-bit module)
