@@ -27,26 +27,37 @@ if __name__ == '__main__':
 
             bot.config['registered'] = True
 
-        if args.file == 'main':
-            response = command.get_main_config()
-        else:
-            response = command.get_file(args.file)
-
+        response = command.get_main_config()
         result_code, data = response
 
-        if result_code == 404:
-            print('Error: file does not exist')
-            exit(0)
-
-        if result_code == 403:
-            bot.config['registered'] = False
-            continue
-
-        elif result_code != 200:
+        if result_code != 200:
             continue
 
         decrypter = ConfigDecrypter(data)
-        file_data = decrypter.decrypt()
+        new_config = decrypter.decrypt()
+
+        bot.merge_server_list(new_config)
+
+        if args.file == 'main':
+            file_data = new_config
+        else:
+            response = command.get_file(args.file)
+
+            result_code, data = response
+
+            if result_code == 404:
+                print('Error: file does not exist')
+                exit(0)
+
+            if result_code == 403:
+                bot.config['registered'] = False
+                continue
+
+            elif result_code != 200:
+                continue
+
+            decrypter = ConfigDecrypter(data)
+            file_data = decrypter.decrypt()
 
         if args.output:
             output_file = open(args.output, 'w')

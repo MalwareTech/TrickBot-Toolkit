@@ -67,6 +67,22 @@ class Bot:
 
         return self.config['server_list']
 
+    def merge_server_list(self, new_config):
+        old_server_list = self.import_servers()
+        new_server_list = []
+
+        config_xml = ElementTree.fromstring(new_config)
+
+        for server in config_xml.iter('srv'):
+            new_server_list.append(server.text)
+        count = 1
+        for server in old_server_list:
+            if server not in new_server_list:
+                count += 1
+                new_server_list.append(server)
+
+        self.config['server_list'] = new_server_list
+
     @staticmethod
     def import_servers():
         help_msg = "servers.txt must contain a list of TrickBot C2 servers in format:\n" \
